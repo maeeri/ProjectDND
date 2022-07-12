@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using ProjectDndConsole.Api;
 using ProjectDndConsole.ApiClasses;
 using ProjectDndConsole.MethodClasses;
+using System.Threading;
 
 
 namespace ProjectDndConsole
@@ -16,12 +18,14 @@ namespace ProjectDndConsole
         {
             while (true)
             {
-                Console.WriteLine("Give a challenge rating: ");
-                string challengerating = Console.ReadLine();
-                Monster monster = await MonsterMethods.GetRandomMonster(challengerating);
-                Console.WriteLine("Press any key");
-                Console.ReadKey();
-                MonsterMethods.PrintMonsterStats(monster);
+                try
+                {
+                    await MonsterMethods.PrintRandomMonster();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Oops!" + e);
+                }
             }
         }
     }
