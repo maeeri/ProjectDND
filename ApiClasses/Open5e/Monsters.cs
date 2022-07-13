@@ -92,4 +92,24 @@ namespace ProjectDndConsole.ApiClasses
         public int investigation { get; set; }
     }
 
+    //public class Action
+    //{
+    //    public string name { get; set; }
+    //    public string desc { get; set; }
+    //    public int attack_bonus { get; set; }
+    //    public string damage_dice { get; set; }
+    //}
+
+    //public class SpecialAbility
+    //{
+    //    public string name { get; set; }
+    //    public string desc { get; set; }
+    //}
+
+    //public class LegendaryAction
+    //{
+    //    public string name { get; set; }
+    //    public string desc { get; set; }
+    //}
+
 }

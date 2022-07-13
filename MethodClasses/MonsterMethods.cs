@@ -10,11 +10,11 @@ using ProjectDndConsole.ApiClasses;
 
 namespace ProjectDndConsole.MethodClasses
 {
-    public class MonsterMethods
+    public static class MonsterMethods
     {
         public static async Task PrintMonsterStats(Monster monster)
         {
-            Console.WriteLine($" Name: {monster.name}\n" +
+            Console.WriteLine($"\n\n Name: {monster.name}\n" +
                               $" Size: {monster.size}\n" +
                               $" Type and subtype: {monster.type}, {monster.subtype}\n" +
                               $" Group:  {monster.group}\n" +
@@ -45,21 +45,19 @@ namespace ProjectDndConsole.MethodClasses
                               $" Languages: {monster.languages}\n" +
                               $" Challenge rating: {monster.challenge_rating}\n" +
                               $" Reactions: {monster.reactions}\n" +
-                              $" Actions: {monster.actions}\n" +
                               $" Legendary description: {monster.legendary_desc}\n" +
-                              $" Legendary actions: {monster.legendary_actions}\n" +
-                              $" Special Abilities: {monster.special_abilities}\n" +
                               $"\n Speed:\n" +
                               $"    Walking: {monster.speed.walk}\n" +
                               $"    Swimming: {monster.speed.swim}\n" +
                               $"    Hovering: {monster.speed.hover}\n" +
                               $"    Flying: {monster.speed.fly}\n" +
                               $"    Climbing: {monster.speed.climb}\n" +
-                              $"    Burrowing: {monster.speed.burrow}\n");
-            Console.WriteLine($"\n Skills:\n" +
-                              $"    Athletics: {monster.skills.athletics}\n" +
-                              $"    Intimidation: {monster.skills.intimidation}\n" +
-                              $"    History: {monster.skills.history}\n" +
+                              $"    Burrowing: {monster.speed.burrow}\n" +
+                              $"    Lightwalking: {monster.speed.lightwalking}\n");
+            Console.WriteLine($"\n Skills:\n" + 
+                              $"    Athletics: {monster.skills.athletics}\n" + 
+                              $"    Intimidation: {monster.skills.intimidation}\n" + 
+                              $"    History: {monster.skills.history}\n" + 
                               $"    Perception: {monster.skills.perception}\n" +
                               $"    Deception: {monster.skills.deception}\n" +
                               $"    Performance: {monster.skills.performance}\n" +
@@ -73,6 +71,28 @@ namespace ProjectDndConsole.MethodClasses
                               $"    Acrobatics: {monster.skills.acrobatics}\n" +
                               $"    Survival: {monster.skills.survival}\n" +
                               $"    Investigation: {monster.skills.investigation}\n");
+
+
+            //Console.WriteLine("\n Special Abilities:\n");
+            //foreach (var ability in monster.special_abilities)
+            //{
+            //    Console.WriteLine($"   Name: {ability.name}\n   Description: {ability.desc}\n\n");
+            //}
+
+            //Console.WriteLine("\n\n Actions:\n");
+            //foreach (var action in monster.actions)
+            //{
+            //    Console.WriteLine($"    Name: {action.name}\n" +
+            //                      $"    Description: {action.desc}\n" +
+            //                      $"    Damage dice: {action.damage_dice}\n" +
+            //                      $"    Attack bonus: {action.attack_bonus}\n\n");
+            //}
+
+            //Console.WriteLine("\n Legendary actions:\n");
+            //foreach (var action in monster.legendary_actions)
+            //{
+            //    Console.WriteLine($"   Name: {action.name}\n   Description: {action.desc}\n\n");
+            //}
 
             Console.WriteLine("\n\n Spells: \n");
             foreach (var spell in monster.spell_list)
@@ -113,30 +133,50 @@ namespace ProjectDndConsole.MethodClasses
         }
 
         //asks for challenge rating, calls for methods to find random monster and to print its info
-        public static async Task PrintRandomMonster()
+        public static async Task PrintRandomMonster(string challengeRating)
+        {
+            while (true)
+            {
+                try
+                {
+                    Monster monster = new Monster();
+                    var t = Task.Run(async () => { monster = await GetRandomMonster(challengeRating); });
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Console.Write(". ");
+                        Thread.Sleep(350);
+                    }
+                    
+                    await PrintMonsterStats(monster);
+                    CommonMethods.PressKey();
+                    break;
+                }
+                catch (NullReferenceException e)
+                {
+                    Thread.Sleep(1000);
+                    Console.WriteLine(" ");
+                }
+            }
+        }
+
+        public static async Task LoopPrintRandomMonster()
         {
             Console.WriteLine("Give a challenge rating:");
-            string challengerating = Console.ReadLine();
-            Stopwatch clicker = new Stopwatch();
-            clicker.Start();
-            //Monster monster = await MonsterMethods.GetRandomMonster(challengerating);
-            Monster monster = new Monster();
-            var t = Task.Run(async () =>
+            string challengeRating = Console.ReadLine();
+            while (true)
             {
-                monster = await MonsterMethods.GetRandomMonster(challengerating);
-            });
+                try
+                {
+                    await PrintRandomMonster(challengeRating);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Oops!" + e);
+                }
 
-            for (int i = 0; i < 10; i++)
-            {
-                Console.Write("~");
-                Thread.Sleep(350);
+                break;
             }
-
-            clicker.Stop();
-            await MonsterMethods.PrintMonsterStats(monster);
-
-            Console.WriteLine("\n" + clicker.Elapsed + "\nPress any key");
-            Console.ReadKey();
         }
     }
 }

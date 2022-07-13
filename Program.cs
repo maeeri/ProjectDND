@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Channels;
 using System.Threading.Tasks;
-using ProjectDndConsole.Api;
-using ProjectDndConsole.ApiClasses;
 using ProjectDndConsole.MethodClasses;
-using System.Threading;
 
 
 namespace ProjectDndConsole
@@ -16,16 +9,14 @@ namespace ProjectDndConsole
     {
         static async Task Main(string[] args)
         {
-            while (true)
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Black;
+            bool menu = true;
+
+            while (menu)
             {
-                try
-                {
-                    await MonsterMethods.PrintRandomMonster();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Oops!" + e);
-                }
+                menu = await CommonMethods.MainMenu();
             }
         }
     }

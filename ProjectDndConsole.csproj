@@ -9,8 +9,4 @@
     <ProjectReference Include="..\ApiHelpers\ApiHelpers.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MethodClasses\" />
-  </ItemGroup>
-
 </Project>
